@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coach Hub – Sign in</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div class="login">
+    <h1>Train with your coach.</h1>
+    <p class="muted">Watch new sessions, join live workouts and message your coach.</p>
+    <div class="lane" aria-hidden="true"></div>
+    <div class="card">
+      <h3 style="margin-bottom:1rem">Sign in to continue</h3>
+      <div id="google-btn"></div>
+      <p id="error" class="error" role="alert"></p>
+    </div>
+  </div>
+
+  <script src="/common.js"></script>
+  <script>
+    if (getToken() && localStorage.getItem('role') === 'user') location.href = '/app';
+
+    const errorEl = document.getElementById('error');
+
+    async function onGoogle(response) {
+      errorEl.textContent = '';
+      try {
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential: response.credential }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Sign-in failed');
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('role', 'user');
+        localStorage.setItem('user', JSON.stringify(data.user));
+        location.href = '/app';
+      } catch (e) {
+        errorEl.textContent = e.message;
+      }
+    }
+
+    async function initGoogle() {
+      try {
+        const { googleClientId } = await (await fetch('/api/config')).json();
+        if (!googleClientId) { errorEl.textContent = 'Google sign-in is not configured yet (missing GOOGLE_CLIENT_ID).'; return; }
+        if (!window.google || !google.accounts) { setTimeout(initGoogle, 200); return; }
+        google.accounts.id.initialize({ client_id: googleClientId, callback: onGoogle });
+        google.accounts.id.renderButton(document.getElementById('google-btn'),
+          { theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', width: 300 });
+      } catch {
+        errorEl.textContent = 'Could not reach the server.';
+      }
+    }
+    initGoogle();
+  </script>
+</body>
+</html>

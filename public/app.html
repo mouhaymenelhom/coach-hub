@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coach Hub</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Coach Hub</div>
+      <nav class="tabs" aria-label="Main">
+        <button class="tab" data-tab="home">Home</button>
+        <button class="tab" data-tab="lives">Lives</button>
+        <button class="tab" data-tab="messages">Coach chat</button>
+        <button class="tab" data-tab="assistant">Assistant</button>
+      </nav>
+      <div class="who">
+        <img id="avatar" alt="" class="hidden">
+        <span id="name"></span>
+        <button class="ghost small" onclick="logout()">Sign out</button>
+      </div>
+    </div>
+    <div class="lane" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="tab-home">
+      <div id="live-banner"></div>
+      <div class="section-head"><h2>Latest from your coach</h2></div>
+      <div id="videos" class="grid"></div>
+    </section>
+
+    <!-- LIVES -->
+    <section id="tab-lives" class="hidden">
+      <div class="section-head"><h2>Lives</h2></div>
+      <div id="lives" class="grid"></div>
+    </section>
+
+    <!-- COACH CHAT -->
+    <section id="tab-messages" class="hidden">
+      <div class="section-head"><h2>Message your coach</h2></div>
+      <div class="chat">
+        <div id="thread" class="chat-log" aria-live="polite"></div>
+        <form id="msg-form" class="chat-form">
+          <input id="msg-input" placeholder="Write a message" autocomplete="off" maxlength="2000" aria-label="Message">
+          <button class="accent" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- AI ASSISTANT -->
+    <section id="tab-assistant" class="hidden">
+      <div class="section-head"><h2>Training assistant</h2><span class="muted">AI answers. Not medical advice.</span></div>
+      <div class="chat">
+        <div id="bot-log" class="chat-log" aria-live="polite"></div>
+        <form id="bot-form" class="chat-form">
+          <input id="bot-input" placeholder="Ask about training, recovery, nutrition…" autocomplete="off" maxlength="2000" aria-label="Ask the assistant">
+          <button class="accent" type="submit">Ask</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/common.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Coach Hub – Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Coach dashboard</div>
+      <nav class="tabs" aria-label="Main">
+        <button class="tab" data-tab="videos">Videos</button>
+        <button class="tab" data-tab="lives">Lives</button>
+        <button class="tab" data-tab="inbox">Messages</button>
+      </nav>
+      <div class="who"><button class="ghost small" onclick="logout()">Sign out</button></div>
+    </div>
+    <div class="lane" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <!-- VIDEOS -->
+    <section id="tab-videos">
+      <form id="video-form" class="panel">
+        <h2 style="margin-bottom:1rem">Publish a video</h2>
+        <div class="field">
+          <label for="v-title">Title</label>
+          <input id="v-title" name="title" required maxlength="120">
+        </div>
+        <div class="field">
+          <label for="v-desc">Description (optional)</label>
+          <textarea id="v-desc" name="description" rows="2" maxlength="1000"></textarea>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="v-url">YouTube / Vimeo / .mp4 link</label>
+            <input id="v-url" name="url" placeholder="https://youtu.be/…">
+          </div>
+          <div class="field">
+            <label for="v-file">…or upload a video file</label>
+            <input id="v-file" name="file" type="file" accept="video/*">
+          </div>
+        </div>
+        <div class="actions"><button class="accent" type="submit" id="v-submit">Publish</button></div>
+        <p id="v-error" class="error" role="alert"></p>
+      </form>
+      <div class="section-head"><h2>Published videos</h2></div>
+      <div id="videos" class="grid"></div>
+    </section>
+
+    <!-- LIVES -->
+    <section id="tab-lives" class="hidden">
+      <form id="live-form" class="panel">
+        <h2 style="margin-bottom:1rem">Schedule a live</h2>
+        <div class="row">
+          <div class="field">
+            <label for="l-title">Title</label>
+            <input id="l-title" required maxlength="120">
+          </div>
+          <div class="field">
+            <label for="l-url">YouTube / Vimeo live link</label>
+            <input id="l-url" required placeholder="https://www.youtube.com/live/…">
+          </div>
+        </div>
+        <div class="actions"><button class="accent" type="submit">Add live</button></div>
+        <p id="l-error" class="error" role="alert"></p>
+      </form>
+      <div class="section-head"><h2>Your lives</h2></div>
+      <div id="lives" class="grid"></div>
+    </section>
+
+    <!-- INBOX -->
+    <section id="tab-inbox" class="hidden">
+      <div class="section-head"><h2>Messages</h2></div>
+      <div class="inbox">
+        <div id="people" class="people"></div>
+        <div class="chat">
+          <div id="thread" class="chat-log" aria-live="polite">
+            <div class="empty">Pick a member to read and reply.</div>
+          </div>
+          <form id="msg-form" class="chat-form">
+            <input id="msg-input" placeholder="Write a reply" autocomplete="off" maxlength="2000" aria-label="Reply" disabled>
+            <button class="accent" type="submit" id="msg-send" disabled>Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/common.js"></script>
+  <script src="/coach.js"></script>
+</body>
+</html>

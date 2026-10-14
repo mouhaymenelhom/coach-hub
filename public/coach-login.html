@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Coach Hub – Coach login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="login">
+    <h1>Coach area</h1>
+    <p class="muted">Private access for the coach.</p>
+    <div class="lane" aria-hidden="true"></div>
+    <form class="card" id="form">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" name="username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="accent" type="submit">Sign in</button>
+      <p id="error" class="error" role="alert"></p>
+    </form>
+  </div>
+
+  <script src="/common.js"></script>
+  <script>
+    if (getToken() && localStorage.getItem('role') === 'coach') location.href = '/coach';
+
+    document.getElementById('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('error');
+      errorEl.textContent = '';
+      try {
+        const res = await fetch('/api/auth/coach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Sign-in failed');
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('role', 'coach');
+        localStorage.setItem('user', JSON.stringify(data.user));
+        location.href = '/coach';
+      } catch (err) {
+        errorEl.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>

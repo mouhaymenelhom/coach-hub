@@ -1,0 +1,24 @@
+{
+  "name": "coach-hub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MVP: a coach shares videos and lives, members chat with the coach and an AI assistant",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.5.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "google-auth-library": "^9.14.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.0",
+    "socket.io": "^4.7.5"
+  }
+}
